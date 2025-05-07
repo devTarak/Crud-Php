@@ -1,3 +1,20 @@
+
+<?php
+include_once "config/database.php";
+$obj = new Query();
+#add user
+if(isset($_POST['submit'])){
+$data= $_POST;
+unset($data['submit']);
+$res=$obj->insertData("users",$data);
+if($res){
+  $_SESSION['success'] = "User has been Created Successfully";
+}else{
+  $_SESSION['error'] = "something went wrong";
+}
+header("LOCATION: index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +69,7 @@
                   </div>
 
                   <div class="col-md-12">
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" name="submit" class="btn btn-success">Save</button>
                     <button type="reset" class="btn btn-secondary">Cancel</button>
                   </div>
                 </div>

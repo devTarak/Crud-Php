@@ -1,3 +1,41 @@
+<?php
+include_once "config/database.php";
+$obj = new Query();
+#Get Data
+$result=$obj->getData("users","*");
+#Delete Data 
+if (isset($_GET['action']) && $_GET['action']=='delete'){
+  $id = $_GET['id'];
+  $del = $obj->deleteData("users","id",$id);
+  $_SESSION['success'] = "User has been deleted Successfully";
+  header("LOCATION: index.php");
+}
+
+// #Delete Data
+// $id = 46;
+// #$del = $obj->deleteData("users","id",$id);
+// #update data
+// $data= array(
+//   "name"=>"Tarak Rahman",
+//   "email"=>"t.asmalife@gmail.com",
+// );
+// $obj->updateData("users",$data,'id', $id);
+// $resultById = $obj->getDataById("users","*",'id',$id);
+// if ($resultById->num_rows>0){
+//   while($row =$resultById->fetch_assoc()){
+//     print_r($row);
+//   }
+// }
+// #Get Data
+// $result=$obj->getData("users","*");
+// if ($result->num_rows > 0){
+//   while($row = $result->fetch_assoc()){
+//     print_r("<pre>");
+//     print_r($row);
+//   }
+// }
+// exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,8 +62,8 @@
         </div>
 
         <div class="col-md-12">
+          <?php include_once("alart.php"); ?>
           <!-- Static alert message placeholder -->
-          <!-- <div class="alert alert-success">User has been deleted successfully</div> -->
 
           <div class="card">
             <div class="card-header">All Users</div>
@@ -42,26 +80,26 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <?php
+                    $i=1;
+                    if ($result->num_rows > 0){
+                      while($row = $result->fetch_assoc()){
+                        
+                    ?>
                     <tr>
-                      <th scope="row">1</th>
-                      <td>John Doe</td>
-                      <td>john@example.com</td>
-                      <td>1234567890</td>
+                      <th scope="row"><?php echo $i++; ?></th>
+                      <td><?php echo $row["name"]; ?></td>
+                      <td><?php echo $row["email"]; ?></td>
+                      <td><?php echo $row["phone"]; ?></td>
                       <td>
-                        <a href="edit-user.php" class="btn btn-primary btn-sm">Edit</a>
-                        <a onclick="return confirm('Do you want to delete this?')" href="#" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="edit-user.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
+                        <a onclick="return confirm('Do you want to delete this?')" href="./?action=delete&&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jane Smith</td>
-                      <td>jane@example.com</td>
-                      <td>0987654321</td>
-                      <td>
-                        <a href="edit-user.php" class="btn btn-primary btn-sm">Edit</a>
-                        <a onclick="return confirm('Do you want to delete this?')" href="#" class="btn btn-danger btn-sm">Delete</a>
-                      </td>
-                    </tr>
+                    <?php 
+                      }
+                    }
+                    ?>
                     <!-- Add more static rows as needed -->
                   </tbody>
                 </table>
