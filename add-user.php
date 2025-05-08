@@ -1,6 +1,6 @@
 
 <?php
-include_once "config/database.php";
+include "config/database.php";
 $obj = new Query();
 #add user
 if(isset($_POST['submit'])){

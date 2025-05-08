@@ -1,3 +1,29 @@
+<?php
+include "config/database.php";
+$obj = new Query();
+  #update data
+if (isset($_GET['id']) && $_GET['id']>0){
+$oldata= array();
+
+$id=$_GET['id'];
+$resultById = $obj->getDataById("users","*",'id',$id);
+$oldata = mysqli_fetch_assoc($resultById);
+  }else{
+    header("LOCATION: index.php");
+    exit;
+  }
+if(isset($_POST['submit'])){
+  $data= $_POST;
+  unset($data['submit']);
+  $res=$obj->updateData("users",$data,'id',$id);
+  if($res){
+    $_SESSION['success'] = "User has been Updated Successfully";
+  }else{
+    $_SESSION['error'] = "something went wrong";
+  }
+  header("LOCATION: index.php");
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,33 +52,31 @@
             <div class="card-header">Fill the form</div>
             <div class="card-body">
               <form method="post" action="#">
-                <!-- Hidden ID field -->
-                <input type="hidden" value="1" name="id" />
 
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Full Name</label>
-                      <input type="text" class="form-control" name="name" value="John Doe" />
+                      <input type="text" class="form-control" name="name" value= "<?php echo $oldata['name']; ?>" />
                     </div>
                   </div>
 
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Email</label>
-                      <input type="email" class="form-control" name="email" value="john@example.com" />
+                      <input type="email" class="form-control" name="email" value="<?php echo $oldata['email']; ?>" />
                     </div>
                   </div>
 
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Phone No</label>
-                      <input type="text" class="form-control" name="phone" value="+1234567890" />
+                      <input type="text" class="form-control" name="phone" value="<?php echo $oldata['phone']; ?>" />
                     </div>
                   </div>
 
                   <div class="col-md-12">
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" name="submit" class="btn btn-success">Save</button>
                     <a href="index.php" class="btn btn-secondary">Back</a>
                   </div>
                 </div>

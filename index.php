@@ -1,5 +1,5 @@
 <?php
-include_once "config/database.php";
+include "config/database.php";
 $obj = new Query();
 #Get Data
 $result=$obj->getData("users","*");
